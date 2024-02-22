@@ -1,0 +1,7 @@
+
+.cell{
+    border: 1px red solid;
+    width: 70px;
+    height: 70px;
+    box-sizing: border-box;
+  }

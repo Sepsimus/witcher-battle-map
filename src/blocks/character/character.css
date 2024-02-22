@@ -1,0 +1,7 @@
+.character{
+    background: url(../../image/character.png);
+    width: 70px;
+    height: 70px;
+    background-size: cover;
+    background-position: center;
+}
