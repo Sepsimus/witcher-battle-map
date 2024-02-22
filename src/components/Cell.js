@@ -4,8 +4,7 @@ import Character from './Character';
 function Cell(props) {
 
     const [dragZoneLight, setDragZoneLight] = React.useState(false);
-    const [pickCharacter, setPickCharacter] = React.useState(false);
-
+    
     function handleDragStart(event){
         const isCharacter = event.target.classList.contains('character');
         if(isCharacter){
@@ -26,7 +25,6 @@ function Cell(props) {
         setDragZoneLight(false);
         const characterClass = event.dataTransfer.getData("Text");
         const isCharacter = event.target.classList.contains('character');
-        console.log(characterClass !== '.character');
         if(isCharacter){
             // console.log('В этой клетке персонаж уже стоит!')
             return
@@ -36,8 +34,7 @@ function Cell(props) {
             return
         }
         // console.log('В этой клетке нет персонажа и я выбрал персонажа')
-        event.target.appendChild(document.querySelector(characterClass));   
-        setPickCharacter(false);
+        event.target.appendChild(document.querySelector(characterClass));
     }
 
     return (
