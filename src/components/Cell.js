@@ -4,6 +4,14 @@ import Character from './Character';
 function Cell(props) {
 
     const [dragZoneLight, setDragZoneLight] = React.useState(false);
+    const [pickCharacter, setPickCharacter] = React.useState(false);
+
+    function handleDragStart(event){
+        const isCharacter = event.target.classList.contains('character');
+        if(isCharacter){
+            event.dataTransfer.setData("Text", '.character');
+        }
+    }
 
     function handleDragOver(event){
         event.preventDefault();
@@ -16,32 +24,24 @@ function Cell(props) {
     
     function handleDrop(event){
         setDragZoneLight(false);
-        // console.log('dropped!')
-        
-        // const previousCharacter = document.querySelector('.character');
-        // console.log(previousCharacter);
-        // if(previousCharacter.parentNode){
-        //     console.log(previousCharacter.parentNode)
-        //     previousCharacter.parentNode.removeChild(previousCharacter);
-        //     // setCreateCharacter(true);
-        // }
-        
-        // const newPosition = event.dataTransfer.getData('Text');
-
-        const character = document.querySelector(`.character`);
+        const characterClass = event.dataTransfer.getData("Text");
         const isCharacter = event.target.classList.contains('character');
+        console.log(characterClass !== '.character');
         if(isCharacter){
+            // console.log('В этой клетке персонаж уже стоит!')
             return
         }
-        character.parentNode.removeAttribute('value')
-        event.target.appendChild(character);
-        event.target.setAttribute('value', 'true');
-        return    
-        
+        if(characterClass !== '.character'){
+            // console.log('Надо тянуть за персонажа, а не за пустую клетку!')
+            return
+        }
+        // console.log('В этой клетке нет персонажа и я выбрал персонажа')
+        event.target.appendChild(document.querySelector(characterClass));   
+        setPickCharacter(false);
     }
 
     return (
-        <div className={`cell ${dragZoneLight ? 'cell_light' : 'cell_dark'}`} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
+        <div className={`cell ${dragZoneLight ? 'cell_light' : 'cell_dark'}`} onDragStart={handleDragStart} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
             {props.isLast ? <Character /> : <></>}
         </div>
     );
