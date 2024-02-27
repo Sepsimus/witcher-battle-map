@@ -1,0 +1,14 @@
+.character__tooltip{
+    color: azure;
+    background-color: dimgray;
+    position: absolute;
+    margin: 0px;
+    padding: 2px 5px;
+    border-radius: 10px;
+    right: -75%;
+    top: 25%;
+    font-style: normal;
+    line-height: normal;
+    opacity: 1;
+    transition: opacity 0.3s ease 0s;
+}

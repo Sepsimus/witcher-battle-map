@@ -2,6 +2,8 @@
     position: relative;
     z-index: 1;
     cursor: pointer;
+    width: 70px;
+    height: 70px;
 }
 
 .character::after{
@@ -14,19 +16,4 @@
     content: '';
     background-size: cover;
     background-position: center;
-}
-
-.character__atack-zone::before{
-    top: -70px;
-    left: -70px;
-    opacity: 0.5;
-    content: "";
-    position: absolute;
-    z-index: -1;
-    background-color: red;
-    width: 210px;
-    height: 210px;
-}
-.character__atack-zone{
-
 }

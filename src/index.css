@@ -17,3 +17,6 @@ code {
 @import url(./blocks/cell/_light/cell_light.css);
 @import url(./blocks/battle-map/battle-map.css);
 @import url(./blocks/character/character.css);
+@import url(./blocks/character/_atack-zone/character_atack-zone.css);
+@import url(./blocks/character/__tooltip/character__tooltip.css);
+@import url(./blocks/character/__tooltip/_hidden/character__tooltip_hidden.css);
