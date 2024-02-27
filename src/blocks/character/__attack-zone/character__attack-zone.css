@@ -1,0 +1,11 @@
+.character__attack-zone{
+    top: -70px;
+    left: -70px;
+    opacity: 0.5;
+    content: "";
+    position: absolute;
+    z-index: -1;
+    background-color: red;
+    width: 210px;
+    height: 210px;
+}

@@ -1,0 +1,4 @@
+.character__tooltip_hidden{
+    visibility: hidden;
+    opacity: 0;
+}

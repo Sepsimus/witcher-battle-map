@@ -1,8 +1,20 @@
 .character{
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+    width: 70px;
+    height: 70px;
+}
+
+.character::after{
+    position: absolute;
+    top: 0px;
+    left: 0px;
     background: url(../../image/character.png);
     width: 70px;
     height: 70px;
+    content: '';
     background-size: cover;
     background-position: center;
-    cursor: pointer;
+    pointer-events: none;
 }
