@@ -3,17 +3,19 @@ import React, { useEffect, useState } from 'react';
 
 function Character() {
 
-    const character = document.querySelector('.character');
 
     const [characterHitPoints, setCharacterHitPoints] = React.useState(35);
 
-    function highlightingAtackZone(event){
-        event.target.classList.toggle('character_atack-zone');
-        if(event.target.classList.contains('character_atack-zone')){
-            event.target.setAttribute('draggable', false);
+    function highlightingAttackZone(event){
+        const character = document.querySelector('.character');
+        const attackZone = document.querySelector('.character__attack-zone')
+
+        attackZone.classList.toggle('character__attack-zone_hidden');
+        if(!attackZone.classList.contains('character__attack-zone_hidden')){
+            character.setAttribute('draggable', false);
             return
         }
-        event.target.setAttribute('draggable', true)
+        character.setAttribute('draggable', true)
     }
 
     function showHitPoints(){
@@ -26,9 +28,14 @@ function Character() {
         document.querySelector('.character__tooltip').classList.add('character__tooltip_hidden')
     }
 
+    function attackAction(){
+        
+    }
+
     return (
         <>
-            <div className={`character`} draggable onClick={highlightingAtackZone} onMouseEnter={showHitPoints} onMouseLeave={hideHitPoints}>
+            <div className={`character`} draggable onClick={highlightingAttackZone} onMouseEnter={showHitPoints} onMouseLeave={hideHitPoints}>
+                <div className='character__attack-zone character__attack-zone_hidden' draggable={false} onClick={attackAction}/>
                 <p className="character__tooltip character__tooltip_hidden">ПЗ: {characterHitPoints}</p>
             </div>
         </>

@@ -16,4 +16,5 @@
     content: '';
     background-size: cover;
     background-position: center;
+    pointer-events: none;
 }
