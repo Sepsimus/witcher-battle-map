@@ -1,12 +1,15 @@
-import { render } from '@testing-library/react';
-import React, { useEffect, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 
 function Character(props) {
 
-    const [openedAttackZone, setOpenedAttackZone] = React.useState(false)
-    const [characterHitPoints, setCharacterHitPoints] = React.useState(35);
+    const [openedAttackZone, setOpenedAttackZone] = useState(false)
+    const [characterHitPoints, setCharacterHitPoints] = useState(35);
 
-    useEffect(()=>{
+    const character = useRef(null);
+    const characterTooltip = useRef(null);
+    const attackZone = useRef(null);
+
+    useLayoutEffect(()=>{
         switch (true){
             case characterHitPoints === 35: 
                 console.log('Здоров!')
@@ -29,48 +32,43 @@ function Character(props) {
                 console.log(`Здоровье: ${characterHitPoints}`);
                 break;
         }
-    },[characterHitPoints])
+    }, [characterHitPoints])
 
     function highlightingAttackZone(event){
-        if(!openedAttackZone){
-            const character = document.querySelector('.character');
-            const attackZone = document.querySelector('.character__attack-zone')
-
-            attackZone.classList.remove('character__attack-zone_hidden');
-            character.setAttribute('draggable', false);
-            setOpenedAttackZone(true)
+        if(openedAttackZone){
+            return
         }
+        attackZone.current.classList.remove('character__attack-zone_hidden');
+        character.current.setAttribute('draggable', false);
+        setOpenedAttackZone(true)
     }
 
     function showHitPoints(){
         setTimeout(() => {
-            document.querySelector('.character__tooltip').classList.remove('character__tooltip_hidden')
+            characterTooltip.current.classList.remove('character__tooltip_hidden')
         }, 300)
     }
 
     function hideHitPoints(){
-        document.querySelector('.character__tooltip').classList.add('character__tooltip_hidden')
+        characterTooltip.current.classList.add('character__tooltip_hidden')
     }
 
     function attackAction(event, numberOfDice){
         console.log('Атака!')
-        setCharacterHitPoints(characterHitPoints - props.throwD6Dice(numberOfDice));
-        
-        const character = document.querySelector('.character');
-        const attackZone = document.querySelector('.character__attack-zone');
-        character.setAttribute('draggable', true);
-        attackZone.classList.add('character__attack-zone_hidden');
+        setCharacterHitPoints(characterHitPoints => characterHitPoints - props.throwD6Dice(numberOfDice));
+        character.current.setAttribute('draggable', true); // different entry: character.current.draggable = true;
+        attackZone.current.classList.add('character__attack-zone_hidden');
         setOpenedAttackZone(false)
     }
 
     return (
         <>
-            <div className={`character`} draggable onClick={highlightingAttackZone} onMouseEnter={showHitPoints} onMouseLeave={hideHitPoints}>
-                <div className='character__attack-zone character__attack-zone_hidden' draggable={false} onClick={(e) => {
+            <div className={`character`} ref={character} draggable onClick={highlightingAttackZone} onMouseEnter={showHitPoints} onMouseLeave={hideHitPoints}>
+                <div className='character__attack-zone character__attack-zone_hidden' ref={attackZone} draggable={false} onClick={(e) => {
                     attackAction(e, 4)
                     }
                 }/>
-                <p className="character__tooltip character__tooltip_hidden">ПЗ: {characterHitPoints}</p>
+                <p className="character__tooltip character__tooltip_hidden" ref={characterTooltip}>ПЗ: {characterHitPoints}</p>
             </div>
         </>
     );
