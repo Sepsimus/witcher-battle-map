@@ -1,8 +1,13 @@
 import '../blocks/app/App.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import BattleMap from './BattleMap';
 
 function App() {
+
+  const [isEndCharacterTurn, setIsEndCharacterTurn] = useState(false)
+  const [characterMovePoints, setCharacterMovePoints] = useState(2);
+
+  console.log('ход врага: '+ isEndCharacterTurn)
 
   function throwD6Dice(numberOfDice){
     let summOfDice = 0;
@@ -15,7 +20,11 @@ function App() {
   return (
     <div className="App">
       <BattleMap 
-        throwD6Dice={throwD6Dice}/>
+        throwD6Dice={throwD6Dice}
+        characterMovePoints={characterMovePoints}
+        setCharacterMovePoints={setCharacterMovePoints}
+        isEndCharacterTurn={isEndCharacterTurn}
+        setIsEndCharacterTurn={setIsEndCharacterTurn}/>
     </div>
   );
 }

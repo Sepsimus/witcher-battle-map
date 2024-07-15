@@ -1,8 +1,8 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 function Character(props) {
 
-    const [openedAttackZone, setOpenedAttackZone] = useState(false)
+    const [characterSelect, setCharacterSelect] = useState(props.characterMovePoints > 0 ? true : false);
     const [characterHitPoints, setCharacterHitPoints] = useState(35);
 
     const character = useRef(null);
@@ -34,13 +34,43 @@ function Character(props) {
         }
     }, [characterHitPoints])
 
-    function highlightingAttackZone(event){
-        if(openedAttackZone){
-            return
+
+    useEffect(()=>{
+        if(!props.isEndCharacterTurn) {
+            props.setCharacterMovePoints(2);
+            setCharacterSelect(true)
         }
-        attackZone.current.classList.remove('character__attack-zone_hidden');
-        character.current.setAttribute('draggable', false);
-        setOpenedAttackZone(true)
+      }, [props.isEndCharacterTurn])
+
+    useEffect(()=>{
+        if(characterSelect) {
+            document.addEventListener('keypress', moveCharacter)
+        }
+        return () => {document.removeEventListener('keypress', moveCharacter)}
+    }, [characterSelect])
+
+
+    function moveCharacter(event){
+        switch(true){
+            case (event.keyCode === 119 || event.keyCode === 1094):
+                if(props.isPositionCharacter >= 20)
+                    props.changeCharacterPosition(props.isPositionCharacter - 20)
+            break;
+            case (event.keyCode === 115 || event.keyCode === 1099):
+                if(props.isPositionCharacter <= 259)
+                    props.changeCharacterPosition(props.isPositionCharacter + 20)
+            break;
+            case (event.keyCode === 100 || event.keyCode === 1074):
+                if(props.isPositionCharacter % 20 !== 19)
+                    props.changeCharacterPosition(props.isPositionCharacter + 1)
+            break;
+            case (event.keyCode === 97 || event.keyCode === 1092):
+                if(props.isPositionCharacter % 20 !== 0)
+                    props.changeCharacterPosition(props.isPositionCharacter - 1)
+            break;
+        }
+        props.setCharacterMovePoints(props.characterMovePoints-1)
+        if(props.characterMovePoints === 1) props.setIsEndCharacterTurn(true)
     }
 
     function showHitPoints(){
@@ -58,17 +88,12 @@ function Character(props) {
         setCharacterHitPoints(characterHitPoints => characterHitPoints - props.throwD6Dice(numberOfDice));
         character.current.setAttribute('draggable', true); // different entry: character.current.draggable = true;
         attackZone.current.classList.add('character__attack-zone_hidden');
-        setOpenedAttackZone(false)
     }
 
     return (
         <>
-            <div className={`character`} ref={character} draggable onClick={highlightingAttackZone} onMouseEnter={showHitPoints} onMouseLeave={hideHitPoints}>
-                <div className='character__attack-zone character__attack-zone_hidden' ref={attackZone} draggable={false} onClick={(e) => {
-                    attackAction(e, 4)
-                    }
-                }/>
-                <p className="character__tooltip character__tooltip_hidden" ref={characterTooltip}>ПЗ: {characterHitPoints}</p>
+            <div className={`character ${characterSelect ? 'character_pulse' : ''}`} ref={character} onMouseEnter={showHitPoints} onMouseLeave={hideHitPoints}>
+                <p className="character__tooltip character__tooltip_hidden" ref={characterTooltip}>ПЗ: {characterHitPoints} <br/>Число ходов: {props.characterMovePoints}</p>
             </div>
         </>
     );

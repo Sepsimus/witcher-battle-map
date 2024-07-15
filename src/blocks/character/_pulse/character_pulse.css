@@ -1,0 +1,21 @@
+@keyframes pulse {
+    0% {
+      transform: scale3d(1, 1, 1);
+    }
+  
+    50% {
+      transform: scale3d(1.05, 1.05, 1.05);
+    }
+  
+    100% {
+      transform: scale3d(1, 1, 1);
+    }
+  }
+  
+  
+  .character_pulse {
+    animation-name: pulse;
+    transform-origin: center bottom;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+  }

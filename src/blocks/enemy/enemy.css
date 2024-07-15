@@ -1,4 +1,4 @@
-.character{
+.enemy{
     position: relative;
     z-index: 1;
     cursor: pointer;
@@ -6,11 +6,11 @@
     height: 70px;
 }
 
-.character::after{
+.enemy::after{
     position: absolute;
     top: 0px;
     left: 0px;
-    background: url(../../image/character.png);
+    background: url(../../image/enemy.png);
     width: 70px;
     height: 70px;
     content: '';
