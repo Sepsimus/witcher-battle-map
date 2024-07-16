@@ -3,37 +3,9 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 function Character(props) {
 
     const [characterSelect, setCharacterSelect] = useState(props.characterMovePoints > 0 ? true : false);
-    const [characterHitPoints, setCharacterHitPoints] = useState(35);
 
     const character = useRef(null);
     const characterTooltip = useRef(null);
-    const attackZone = useRef(null);
-
-    useLayoutEffect(()=>{
-        switch (true){
-            case characterHitPoints === 35: 
-                console.log('Здоров!')
-                console.log(`Здоровье: ${characterHitPoints}`);
-                break;
-            case characterHitPoints < 35 && characterHitPoints > 25:
-                console.log('Получил повреждения!')
-                console.log(`Здоровье: ${characterHitPoints}`);
-                break;
-            case characterHitPoints < 25 && characterHitPoints > 5:
-                console.log('Серьезные повреждения!')
-                console.log(`Здоровье: ${characterHitPoints}`);
-                break;
-            case characterHitPoints < 5 && characterHitPoints > 0:
-                console.log('Код красный!')
-                console.log(`Здоровье: ${characterHitPoints}`);
-                break;
-            case characterHitPoints <= 0:
-                console.log('Пульса нет...')
-                console.log(`Здоровье: ${characterHitPoints}`);
-                break;
-        }
-    }, [characterHitPoints])
-
 
     useEffect(()=>{
         if(!props.isEndCharacterTurn) {
@@ -46,9 +18,10 @@ function Character(props) {
         if(characterSelect) {
             document.addEventListener('keypress', moveCharacter)
         }
-        return () => {document.removeEventListener('keypress', moveCharacter)}
+        return () => {
+            document.removeEventListener('keypress', moveCharacter)
+        }
     }, [characterSelect])
-
 
     function moveCharacter(event){
         switch(true){
@@ -73,27 +46,10 @@ function Character(props) {
         if(props.characterMovePoints === 1) props.setIsEndCharacterTurn(true)
     }
 
-    function showHitPoints(){
-        setTimeout(() => {
-            characterTooltip.current.classList.remove('character__tooltip_hidden')
-        }, 300)
-    }
-
-    function hideHitPoints(){
-        characterTooltip.current.classList.add('character__tooltip_hidden')
-    }
-
-    function attackAction(event, numberOfDice){
-        console.log('Атака!')
-        setCharacterHitPoints(characterHitPoints => characterHitPoints - props.throwD6Dice(numberOfDice));
-        character.current.setAttribute('draggable', true); // different entry: character.current.draggable = true;
-        attackZone.current.classList.add('character__attack-zone_hidden');
-    }
-
     return (
         <>
-            <div className={`character ${characterSelect ? 'character_pulse' : ''}`} ref={character} onMouseEnter={showHitPoints} onMouseLeave={hideHitPoints}>
-                <p className="character__tooltip character__tooltip_hidden" ref={characterTooltip}>ПЗ: {characterHitPoints} <br/>Число ходов: {props.characterMovePoints}</p>
+            <div className={`character ${characterSelect ? 'character_pulse' : ''}`} ref={character} onMouseEnter={() => {props.showHitPoints(characterTooltip, 'character')}} onMouseLeave={() => {props.hideHitPoints(characterTooltip, 'character')}}>
+                <p className="character__tooltip character__tooltip_hidden" ref={characterTooltip}>ПЗ: {props.characterHitPoints} <br/>Число ходов: {props.characterMovePoints}</p>
             </div>
         </>
     );

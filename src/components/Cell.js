@@ -4,24 +4,32 @@ import Enemy from './Enemy';
 
 function Cell(props) {
     return (
-        <div className={`cell ${'cell_'+props.position}`}>
+        <div className={`cell ${'cell_'+props.position} ${props.position === props.isPositionEnemy ? 'cell_occupied' : ''}  ${props.position === props.isPositionCharacter ? 'cell_occupied' : ''}`}>
         {props.position === props.isPositionEnemy && 
             <Enemy 
-                throwD6Dice={props.throwD6Dice}
                 isPositionCharacter={props.isPositionCharacter}
                 changeEnemyPosition={props.changeEnemyPosition}
                 isPositionEnemy={props.isPositionEnemy}
                 isEndCharacterTurn={props.isEndCharacterTurn}
                 setIsEndCharacterTurn={props.setIsEndCharacterTurn}
+                showHitPoints={props.showHitPoints}
+                hideHitPoints={props.hideHitPoints}
+                enemyHitPoints={props.enemyHitPoints}
             />}
             {props.position === props.isPositionCharacter && 
                 <Character 
-                    throwD6Dice={props.throwD6Dice}
                     isPositionCharacter={props.isPositionCharacter}
+                    isPositionEnemy={props.isPositionEnemy}
                     changeCharacterPosition={props.changeCharacterPosition}
+
                     characterMovePoints={props.characterMovePoints}
                     setCharacterMovePoints={props.setCharacterMovePoints}
+                    isEndCharacterTurn={props.isEndCharacterTurn}
                     setIsEndCharacterTurn={props.setIsEndCharacterTurn}
+                    showHitPoints={props.showHitPoints}
+                    hideHitPoints={props.hideHitPoints}
+                    attackAction={props.attackAction}
+                    characterHitPoints={props.characterHitPoints}
                 />}
         </div>
     );

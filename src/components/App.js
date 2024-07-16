@@ -7,8 +7,6 @@ function App() {
   const [isEndCharacterTurn, setIsEndCharacterTurn] = useState(false)
   const [characterMovePoints, setCharacterMovePoints] = useState(2);
 
-  console.log('ход врага: '+ isEndCharacterTurn)
-
   function throwD6Dice(numberOfDice){
     let summOfDice = 0;
     for (let i = 0; i < numberOfDice; i++){
