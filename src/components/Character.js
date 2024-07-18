@@ -7,12 +7,12 @@ function Character(props) {
     const character = useRef(null);
     const characterTooltip = useRef(null);
 
-    useEffect(()=>{
-        if(!props.isEndCharacterTurn) {
-            props.setCharacterMovePoints(2);
-            setCharacterSelect(true)
-        }
-      }, [props.isEndCharacterTurn])
+    // useEffect(()=>{
+    //     if(!props.isEndCharacterTurn) {
+    //         props.setCharacterMovePoints(2);
+    //         setCharacterSelect(true)
+    //     }
+    //   }, [props.isEndCharacterTurn])
 
     useEffect(()=>{
         if(characterSelect) {
@@ -23,32 +23,52 @@ function Character(props) {
         }
     }, [characterSelect])
 
+    function cancellationOfMovement(currentVector, cancelingVector){
+        if(currentVector !== cancelingVector)
+            return true
+    }
+
     function moveCharacter(event){
+        let vector = props.isPositionCharacter - props.isPositionEnemy;
         switch(true){
             case (event.keyCode === 119 || event.keyCode === 1094):
-                if(props.isPositionCharacter >= 20)
-                    props.changeCharacterPosition(props.isPositionCharacter - 20)
+                if(props.isPositionCharacter >= 20 && cancellationOfMovement(vector, 20)){
+                    props.changeCharacterPosition(props.isPositionCharacter - 20)   
+                    props.setCharacterMovePoints(props.characterMovePoints-1)
+                }
             break;
             case (event.keyCode === 115 || event.keyCode === 1099):
-                if(props.isPositionCharacter <= 259)
+                if(props.isPositionCharacter <= 259 && cancellationOfMovement(vector, -20)){
                     props.changeCharacterPosition(props.isPositionCharacter + 20)
+                    props.setCharacterMovePoints(props.characterMovePoints-1)
+                }
             break;
             case (event.keyCode === 100 || event.keyCode === 1074):
-                if(props.isPositionCharacter % 20 !== 19)
-                    props.changeCharacterPosition(props.isPositionCharacter + 1)
+                if(props.isPositionCharacter % 20 !== 19 && cancellationOfMovement(vector, -1)){
+                    props.changeCharacterPosition(props.isPositionCharacter + 1)   
+                    props.setCharacterMovePoints(props.characterMovePoints-1)
+                }
             break;
             case (event.keyCode === 97 || event.keyCode === 1092):
-                if(props.isPositionCharacter % 20 !== 0)
-                    props.changeCharacterPosition(props.isPositionCharacter - 1)
+                if(props.isPositionCharacter % 20 !== 0 && cancellationOfMovement(vector, 1)){
+                    props.changeCharacterPosition(props.isPositionCharacter - 1)   
+                    props.setCharacterMovePoints(props.characterMovePoints-1)
+                }
             break;
         }
-        props.setCharacterMovePoints(props.characterMovePoints-1)
-        if(props.characterMovePoints === 1) props.setIsEndCharacterTurn(true)
+        if(props.characterMovePoints === 1 && Math.abs(vector) !== 21 && Math.abs(vector) !== 19) {
+            console.log(vector)
+            console.log('Ход завершен')
+            props.setIsEndCharacterTurn(true)
+        }
     }
+
+    const deadClass = props.characterHitPoints <= 0 ? 'character_dead' : 'character_alive'
+    const selectClass = characterSelect && props.characterHitPoints > 0 ? 'character_pulse': 'character_inactive'; 
 
     return (
         <>
-            <div className={`character ${characterSelect ? 'character_pulse' : ''}`} ref={character} onMouseEnter={() => {props.showHitPoints(characterTooltip, 'character')}} onMouseLeave={() => {props.hideHitPoints(characterTooltip, 'character')}}>
+            <div className={`character ${deadClass} ${selectClass}`} ref={character} onMouseEnter={() => {props.showHitPoints(characterTooltip, 'character')}} onMouseLeave={() => {props.hideHitPoints(characterTooltip, 'character')}}>
                 <p className="character__tooltip character__tooltip_hidden" ref={characterTooltip}>ПЗ: {props.characterHitPoints} <br/>Число ходов: {props.characterMovePoints}</p>
             </div>
         </>

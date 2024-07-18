@@ -1,0 +1,6 @@
+.character_dead{
+    background: url(../../../image/dead.png);
+    background-size: cover;
+    background-position: center;
+    pointer-events: none;
+}

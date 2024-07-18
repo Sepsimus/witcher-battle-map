@@ -63,18 +63,24 @@ function BattleMap(props) {
       }
   }
 
-  function checkTeory(event){
+  function attackTarget(event, target){
     switch(true){
-      case event.target.classList.contains('enemy'):
-        console.log('Attack enemy')
-        attackAction(3, setEnemyHitPoints, enemyHitPoints)
-      break;
-      case event.target.classList.contains('character'):
+      case (target === 'character'):
         console.log('Attack character')
         attackAction(2, setCharacterHitPoints, characterHitPoints)
       break;
+      case (event.target.classList.contains('enemy')):
+        console.log('Attack enemy')
+        attackAction(3, setEnemyHitPoints, enemyHitPoints)
+        props.setIsEndCharacterTurn(true)
+      break;
     }
   }
+
+  useLayoutEffect(()=>{
+    if(props.isEndCharacterTurn)
+      attackTarget('', 'character')
+  }, [props.isEndCharacterTurn])
 
   function renderCells(numberOfCells){
     let array = [];
@@ -103,7 +109,7 @@ function BattleMap(props) {
   }
 
   return (
-      <div className='battle-map' onClick={(e) => {checkTeory(e)}}>
+      <div className='battle-map' onClick={(e) => {attackTarget(e, )}}>
         {renderCells(280)}
       </div>
   );

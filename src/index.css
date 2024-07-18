@@ -22,6 +22,7 @@ code {
 @import url(./blocks/enemy/__tooltip/_hidden/enemy__tooltip_hidden.css);
 
 @import url(./blocks/character/character.css);
+@import url(./blocks/character/_dead/character_dead.css);
 @import url(./blocks/character/_pulse/character_pulse.css);
 @import url(./blocks/character/__attack-zone/character__attack-zone.css);
 @import url(./blocks/character/__attack-zone/_hidden/character__attack-zone_hidden.css);

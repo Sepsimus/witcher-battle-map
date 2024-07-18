@@ -15,6 +15,8 @@ function Enemy(props) {
     function moveEnemy(){
         let vector = props.isPositionCharacter - props.isPositionEnemy;
         switch(true){
+            case (Math.abs(vector) === 20 || Math.abs(vector) === 1 ):
+            break;
             case (vector > -20 && vector < -1):
                     props.changeEnemyPosition(props.isPositionEnemy - 1)
             break;
