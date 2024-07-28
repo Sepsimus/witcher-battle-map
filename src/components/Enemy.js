@@ -33,9 +33,11 @@ function Enemy(props) {
         props.setIsEndCharacterTurn(false)
     }
 
+    const deadClass = props.enemyHitPoints <= 0 ? 'enemy_dead' : 'enemy_alive'
+
     return (
         <>
-            <div className={`enemy`} ref={enemy} onMouseEnter={() => {props.showHitPoints(enemyTooltip, 'enemy')}} onMouseLeave={() => {props.hideHitPoints(enemyTooltip, 'enemy')}}>
+            <div className={`enemy ${deadClass}`} ref={enemy} onMouseEnter={() => {props.showHitPoints(enemyTooltip, 'enemy')}} onMouseLeave={() => {props.hideHitPoints(enemyTooltip, 'enemy')}}>
                 <p className="enemy__tooltip enemy__tooltip_hidden" ref={enemyTooltip}>ПЗ: {props.enemyHitPoints}</p>
             </div>
         </>

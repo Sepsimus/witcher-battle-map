@@ -7,12 +7,12 @@ function Character(props) {
     const character = useRef(null);
     const characterTooltip = useRef(null);
 
-    // useEffect(()=>{
-    //     if(!props.isEndCharacterTurn) {
-    //         props.setCharacterMovePoints(2);
-    //         setCharacterSelect(true)
-    //     }
-    //   }, [props.isEndCharacterTurn])
+    useEffect(()=>{
+        if(!props.isEndCharacterTurn) {
+            props.setCharacterMovePoints(2);
+            setCharacterSelect(true)
+        }
+      }, [props.isEndCharacterTurn])
 
     useEffect(()=>{
         if(characterSelect) {
@@ -56,7 +56,11 @@ function Character(props) {
                 }
             break;
         }
-        if(props.characterMovePoints === 1 && Math.abs(vector) !== 21 && Math.abs(vector) !== 19) {
+
+        console.log(props.characterMovePoints)
+        console.log('Вектор после: ' + vector);
+
+        if(props.characterMovePoints === 1 && Math.abs(vector) !== 20 && Math.abs(vector) !== 1) {
             console.log(vector)
             console.log('Ход завершен')
             props.setIsEndCharacterTurn(true)

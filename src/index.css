@@ -20,6 +20,7 @@ code {
 @import url(./blocks/enemy/enemy.css);
 @import url(./blocks/enemy/__tooltip/enemy__tooltip.css);
 @import url(./blocks/enemy/__tooltip/_hidden/enemy__tooltip_hidden.css);
+@import url(./blocks/enemy/_dead/enemy_dead.css);
 
 @import url(./blocks/character/character.css);
 @import url(./blocks/character/_dead/character_dead.css);

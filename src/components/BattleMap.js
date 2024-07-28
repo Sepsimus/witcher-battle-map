@@ -78,7 +78,7 @@ function BattleMap(props) {
   }
 
   useLayoutEffect(()=>{
-    if(props.isEndCharacterTurn)
+    if(props.isEndCharacterTurn && enemyHitPoints > 0)
       attackTarget('', 'character')
   }, [props.isEndCharacterTurn])
 
