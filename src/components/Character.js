@@ -3,18 +3,37 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 function Character(props) {
 
     const [characterSelect, setCharacterSelect] = useState(props.characterMovePoints > 0 ? true : false);
+    const vector = props.isPositionCharacter - props.isPositionEnemy;
 
     const character = useRef(null);
     const characterTooltip = useRef(null);
 
     useEffect(()=>{
         if(!props.isEndCharacterTurn) {
-            props.setCharacterMovePoints(2);
             setCharacterSelect(true)
+            // props.setCharacterMovePoints(2);
         }
       }, [props.isEndCharacterTurn])
 
-    useEffect(()=>{
+      useLayoutEffect(()=>{ 
+        // console.log(props.characterMovePoints)
+        if(props.characterMovePoints === 0 && !(Math.abs(vector) === 20 || Math.abs(vector) === 1)) {
+            console.log('I END THIS TURN')
+            props.setEndCharacterAttack(true)
+        }
+    }, [])
+      
+    useLayoutEffect(()=>{ 
+        if(props.characterMovePoints === 0 && props.endCharacterAttack === true) {
+            // console.log(vector)
+            console.log('Ход завершен')
+            props.setIsEndCharacterTurn(true)
+            props.setCharacterMovePoints(2);
+        }
+      }, [props.endCharacterAttack])
+
+
+    useLayoutEffect(()=>{
         if(characterSelect) {
             document.addEventListener('keypress', moveCharacter)
         }
@@ -29,7 +48,8 @@ function Character(props) {
     }
 
     function moveCharacter(event){
-        let vector = props.isPositionCharacter - props.isPositionEnemy;
+        console.log(props.characterMovePoints)
+        if (props.characterMovePoints === 0) return
         switch(true){
             case (event.keyCode === 119 || event.keyCode === 1094):
                 if(props.isPositionCharacter >= 20 && cancellationOfMovement(vector, 20)){
@@ -55,15 +75,6 @@ function Character(props) {
                     props.setCharacterMovePoints(props.characterMovePoints-1)
                 }
             break;
-        }
-
-        console.log(props.characterMovePoints)
-        console.log('Вектор после: ' + vector);
-
-        if(props.characterMovePoints === 1 && Math.abs(vector) !== 20 && Math.abs(vector) !== 1) {
-            console.log(vector)
-            console.log('Ход завершен')
-            props.setIsEndCharacterTurn(true)
         }
     }
 

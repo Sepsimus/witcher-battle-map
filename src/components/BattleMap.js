@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useEffect, useState } from 'react';
 import Cell from './Cell';
 import Character from './Character';
 
@@ -8,12 +8,13 @@ function BattleMap(props) {
   const [enemyPosition, setEnemyPosition] = useState(130)
   const [characterHitPoints, setCharacterHitPoints] = useState(35);
   const [enemyHitPoints, setEnemyHitPoints] = useState(35);
+  const [endCharacterAttack, setEndCharacterAttack] = useState(false);
 
-  useLayoutEffect(()=>{
+  useEffect(()=>{
     checkHitPointStatus(characterHitPoints)
   }, [characterHitPoints])
 
-  useLayoutEffect(()=>{
+  useEffect(()=>{
     checkHitPointStatus(enemyHitPoints)
   }, [enemyHitPoints])
 
@@ -67,19 +68,22 @@ function BattleMap(props) {
     switch(true){
       case (target === 'character'):
         console.log('Attack character')
+        setEndCharacterAttack(false)
         attackAction(2, setCharacterHitPoints, characterHitPoints)
       break;
       case (event.target.classList.contains('enemy')):
         console.log('Attack enemy')
+        setEndCharacterAttack(true);
         attackAction(3, setEnemyHitPoints, enemyHitPoints)
-        props.setIsEndCharacterTurn(true)
       break;
     }
   }
 
-  useLayoutEffect(()=>{
-    if(props.isEndCharacterTurn && enemyHitPoints > 0)
+
+  useEffect(()=>{
+    if(props.isEndCharacterTurn && enemyHitPoints > 0){
       attackTarget('', 'character')
+    }
   }, [props.isEndCharacterTurn])
 
   function renderCells(numberOfCells){
@@ -103,6 +107,8 @@ function BattleMap(props) {
               attackAction={attackAction}
               characterHitPoints={characterHitPoints}
               enemyHitPoints={enemyHitPoints}
+              endCharacterAttack={endCharacterAttack}
+              setEndCharacterAttack={setEndCharacterAttack}
             />)
   }
     return array;

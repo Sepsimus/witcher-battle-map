@@ -30,6 +30,8 @@ function Cell(props) {
                     hideHitPoints={props.hideHitPoints}
                     attackAction={props.attackAction}
                     characterHitPoints={props.characterHitPoints}
+                    endCharacterAttack={props.endCharacterAttack}
+                    setEndCharacterAttack={props.setEndCharacterAttack}
                 />}
         </div>
     );

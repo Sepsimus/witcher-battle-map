@@ -1,5 +1,5 @@
 import '../blocks/app/App.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import BattleMap from './BattleMap';
 
 function App() {
