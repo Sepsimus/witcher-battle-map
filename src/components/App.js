@@ -1,22 +1,12 @@
 import '../blocks/app/App.css';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import BattleMap from './BattleMap';
+import CharacterConfig from '../configuration/CharacterConfig';
 
 function App() {
 
   const [isEndCharacterTurn, setIsEndCharacterTurn] = useState(false)
-  const [characterMovePoints, setCharacterMovePoints] = useState(2);
-
-  // useEffect(()=>{
-  //   if(!isEndCharacterTurn) setCharacterMovePoints(2);
-  // }, [isEndCharacterTurn])
-
-  useEffect(()=>{
-    // if(!isEndCharacterTurn) setCharacterMovePoints(2);
-      console.log('Я здесь: ' + characterMovePoints)
-      console.log('Я там: ' + isEndCharacterTurn)
-  }, [isEndCharacterTurn, characterMovePoints])
-
+  const [characterMovePoints, setCharacterMovePoints] = useState(CharacterConfig.movementPoints || 2);
 
   function throwD6Dice(numberOfDice){
     let summOfDice = 0;

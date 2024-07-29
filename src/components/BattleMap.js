@@ -1,47 +1,22 @@
 import React, { useLayoutEffect, useEffect, useState } from 'react';
 import Cell from './Cell';
-import Character from './Character';
+import CharacterConfig from '../configuration/CharacterConfig';
+import WeaponConfig from '../configuration/WeaponConfig';
+import ArmorConfig from '../configuration/ArmorConfig';
 
 function BattleMap(props) {
 
-  const [characterPosition, setCharacterPosition] = useState(150)
+  const [characterPosition, setCharacterPosition] = useState(170)
   const [enemyPosition, setEnemyPosition] = useState(130)
-  const [characterHitPoints, setCharacterHitPoints] = useState(35);
+  const [characterHitPoints, setCharacterHitPoints] = useState(CharacterConfig.hitPoints || 0);
   const [enemyHitPoints, setEnemyHitPoints] = useState(35);
+  const [characterArmorPoints, setCharacterArmorPoints] = useState(ArmorConfig[CharacterConfig.armor].armorPoints || 0); // если нет CharacterConfig.armor упадет с ошибкой - добавь проверку!
+  const characterDiceNumber = WeaponConfig[CharacterConfig.weapon].numberOfDice || 0; // если нет CharacterConfig.weapon упадет с ошибкой - добавь проверку!
+  const characterDamageMod = WeaponConfig[CharacterConfig.weapon].damageMod; // если нет CharacterConfig.weapon упадет с ошибкой - добавь проверку!
+  const [enemyArmorPoints, setEnemyArmorPoints] = useState(3);
+  const maxEnemyArmorPoints = 3;
+  const enemyDiceNumber = 2;
   const [endCharacterAttack, setEndCharacterAttack] = useState(false);
-
-  useEffect(()=>{
-    checkHitPointStatus(characterHitPoints)
-  }, [characterHitPoints])
-
-  useEffect(()=>{
-    checkHitPointStatus(enemyHitPoints)
-  }, [enemyHitPoints])
-
-  function checkHitPointStatus(hitPoint){ 
-    switch (true){
-      case hitPoint === 35: 
-          // console.log('Здоров!')
-          // console.log(`Здоровье: ${hitPoint}`);
-          break;
-      case hitPoint < 35 && hitPoint > 25:
-          // console.log('Получил повреждения!')
-          // console.log(`Здоровье: ${hitPoint}`);
-          break;
-      case hitPoint < 25 && hitPoint > 5:
-          // console.log('Серьезные повреждения!')
-          // console.log(`Здоровье: ${hitPoint}`);
-          break;
-      case hitPoint < 5 && hitPoint > 0:
-          // console.log('Код красный!')
-          // console.log(`Здоровье: ${hitPoint}`);
-          break;
-      case hitPoint <= 0:
-          // console.log('Пульса нет...')
-          // console.log(`Здоровье: ${hitPoint}`);
-          break;
-  }
-  }
 
   function showHitPoints(tooltip, className){
     setTimeout(() => {
@@ -53,13 +28,15 @@ function BattleMap(props) {
       tooltip.current.classList.add(`${className}__tooltip_hidden`)
   }
 
-  function attackAction(numberOfDice, setNewHitPoints, currentHitPoints){
-      // console.log('Атака!')
+  function attackAction(numberOfDice, damageMod, setNewHitPoints, currentHitPoints, currentArmor, setNewArmor){
       let vector = Math.abs(characterPosition - enemyPosition);
+      let currentDamage = props.throwD6Dice(numberOfDice) + damageMod;
       switch(vector){
           case 1: 
           case 20:
-              setNewHitPoints(currentHitPoints - props.throwD6Dice(numberOfDice))
+              if(currentArmor > 0 && currentArmor < currentDamage) setNewArmor(currentArmor - 1);
+              currentDamage = currentDamage - currentArmor > 0 ? currentDamage - currentArmor : 0;
+              setNewHitPoints(currentHitPoints - currentDamage)
           break;
       }
   }
@@ -69,13 +46,13 @@ function BattleMap(props) {
       case (target === 'character'):
         console.log('Attack character')
         setEndCharacterAttack(false)
-        attackAction(2, setCharacterHitPoints, characterHitPoints)
+        attackAction(enemyDiceNumber, 0, setCharacterHitPoints, characterHitPoints, characterArmorPoints, setCharacterArmorPoints)
         props.setIsEndCharacterTurn(false)
       break;
       case (event.target.classList.contains('enemy')):
         console.log('Attack enemy')
         setEndCharacterAttack(true);
-        attackAction(3, setEnemyHitPoints, enemyHitPoints)
+        attackAction(characterDiceNumber, characterDamageMod, setEnemyHitPoints, enemyHitPoints, enemyArmorPoints, setEnemyArmorPoints)
         props.setIsEndCharacterTurn(true)
       break;
     }
@@ -83,7 +60,7 @@ function BattleMap(props) {
 
 
   useEffect(()=>{
-    if(enemyHitPoints > 0){
+    if(!props.isEndCharacterTurn && enemyHitPoints > 0){
       attackTarget('', 'character')
     }
   }, [props.isEndCharacterTurn])
@@ -112,6 +89,9 @@ function BattleMap(props) {
               endCharacterAttack={endCharacterAttack}
               setEndCharacterAttack={setEndCharacterAttack}
               attackTarget={attackTarget}
+              characterArmorPoints={characterArmorPoints}
+              enemyArmorPoints={enemyArmorPoints}
+              maxEnemyArmorPoints={maxEnemyArmorPoints}
             />)
   }
     return array;

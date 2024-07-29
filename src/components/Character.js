@@ -1,4 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import CharacterConfig from '../configuration/CharacterConfig';
+import WeaponConfig from '../configuration/WeaponConfig';
+import ArmorConfig from '../configuration/ArmorConfig';
 
 function Character(props) {
 
@@ -11,7 +14,7 @@ function Character(props) {
     useEffect(()=>{
         if(props.isEndCharacterTurn) {
             setCharacterSelect(true)
-            props.setCharacterMovePoints(2);
+            props.setCharacterMovePoints(CharacterConfig.movementPoints || 2);
         }
       }, [props.isEndCharacterTurn])
 
@@ -78,7 +81,12 @@ function Character(props) {
     return (
         <>
             <div className={`character ${deadClass} ${selectClass}`} ref={character} onMouseEnter={() => {props.showHitPoints(characterTooltip, 'character')}} onMouseLeave={() => {props.hideHitPoints(characterTooltip, 'character')}}>
-                <p className="character__tooltip character__tooltip_hidden" ref={characterTooltip}>ПЗ: {props.characterHitPoints} <br/>Число ходов: {props.characterMovePoints}</p>
+                <p className="character__tooltip character__tooltip_hidden" ref={characterTooltip}>
+                    ПЗ: {props.characterHitPoints}/{CharacterConfig.hitPoints}
+                    <br/>Число ходов: {props.characterMovePoints}
+                    <br/>Броня: {props.characterArmorPoints}/{ArmorConfig[CharacterConfig.armor].armorPoints}
+                    <br/>Урон: {WeaponConfig[CharacterConfig.weapon].numberOfDice}d6{WeaponConfig[CharacterConfig.weapon].damageMod > 0 && '+'+WeaponConfig[CharacterConfig.weapon].damageMod}
+                </p>
             </div>
         </>
     );

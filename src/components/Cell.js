@@ -16,6 +16,8 @@ function Cell(props) {
                 hideHitPoints={props.hideHitPoints}
                 enemyHitPoints={props.enemyHitPoints}
                 attackTarget={props.attackTarget}
+                enemyArmorPoints={props.enemyArmorPoints}
+                maxEnemyArmorPoints={props.maxEnemyArmorPoints}
             />}
             {props.position === props.isPositionCharacter && 
                 <Character 
@@ -33,6 +35,7 @@ function Cell(props) {
                     characterHitPoints={props.characterHitPoints}
                     endCharacterAttack={props.endCharacterAttack}
                     setEndCharacterAttack={props.setEndCharacterAttack}
+                    characterArmorPoints={props.characterArmorPoints}
                 />}
         </div>
     );
