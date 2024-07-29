@@ -15,6 +15,7 @@ function Cell(props) {
                 showHitPoints={props.showHitPoints}
                 hideHitPoints={props.hideHitPoints}
                 enemyHitPoints={props.enemyHitPoints}
+                attackTarget={props.attackTarget}
             />}
             {props.position === props.isPositionCharacter && 
                 <Character 

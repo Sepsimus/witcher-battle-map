@@ -7,6 +7,17 @@ function App() {
   const [isEndCharacterTurn, setIsEndCharacterTurn] = useState(false)
   const [characterMovePoints, setCharacterMovePoints] = useState(2);
 
+  // useEffect(()=>{
+  //   if(!isEndCharacterTurn) setCharacterMovePoints(2);
+  // }, [isEndCharacterTurn])
+
+  useEffect(()=>{
+    // if(!isEndCharacterTurn) setCharacterMovePoints(2);
+      console.log('Я здесь: ' + characterMovePoints)
+      console.log('Я там: ' + isEndCharacterTurn)
+  }, [isEndCharacterTurn, characterMovePoints])
+
+
   function throwD6Dice(numberOfDice){
     let summOfDice = 0;
     for (let i = 0; i < numberOfDice; i++){

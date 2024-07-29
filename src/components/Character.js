@@ -9,38 +9,32 @@ function Character(props) {
     const characterTooltip = useRef(null);
 
     useEffect(()=>{
-        if(!props.isEndCharacterTurn) {
+        if(props.isEndCharacterTurn) {
             setCharacterSelect(true)
-            // props.setCharacterMovePoints(2);
+            props.setCharacterMovePoints(2);
         }
       }, [props.isEndCharacterTurn])
 
       useLayoutEffect(()=>{ 
-        // console.log(props.characterMovePoints)
         if(props.characterMovePoints === 0 && !(Math.abs(vector) === 20 || Math.abs(vector) === 1)) {
-            console.log('I END THIS TURN')
             props.setEndCharacterAttack(true)
         }
     }, [])
       
-    useLayoutEffect(()=>{ 
+    useEffect(()=>{ 
         if(props.characterMovePoints === 0 && props.endCharacterAttack === true) {
-            // console.log(vector)
-            console.log('Ход завершен')
             props.setIsEndCharacterTurn(true)
-            props.setCharacterMovePoints(2);
         }
       }, [props.endCharacterAttack])
 
-
-    useLayoutEffect(()=>{
+    useEffect(()=>{
         if(characterSelect) {
             document.addEventListener('keypress', moveCharacter)
         }
         return () => {
             document.removeEventListener('keypress', moveCharacter)
         }
-    }, [characterSelect])
+    }, [props.characterMovePoints])
 
     function cancellationOfMovement(currentVector, cancelingVector){
         if(currentVector !== cancelingVector)
@@ -48,9 +42,9 @@ function Character(props) {
     }
 
     function moveCharacter(event){
-        console.log(props.characterMovePoints)
-        if (props.characterMovePoints === 0) return
         switch(true){
+            case (props.characterMovePoints === 0):
+                break;
             case (event.keyCode === 119 || event.keyCode === 1094):
                 if(props.isPositionCharacter >= 20 && cancellationOfMovement(vector, 20)){
                     props.changeCharacterPosition(props.isPositionCharacter - 20)   

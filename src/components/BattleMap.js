@@ -21,24 +21,24 @@ function BattleMap(props) {
   function checkHitPointStatus(hitPoint){ 
     switch (true){
       case hitPoint === 35: 
-          console.log('Здоров!')
-          console.log(`Здоровье: ${hitPoint}`);
+          // console.log('Здоров!')
+          // console.log(`Здоровье: ${hitPoint}`);
           break;
       case hitPoint < 35 && hitPoint > 25:
-          console.log('Получил повреждения!')
-          console.log(`Здоровье: ${hitPoint}`);
+          // console.log('Получил повреждения!')
+          // console.log(`Здоровье: ${hitPoint}`);
           break;
       case hitPoint < 25 && hitPoint > 5:
-          console.log('Серьезные повреждения!')
-          console.log(`Здоровье: ${hitPoint}`);
+          // console.log('Серьезные повреждения!')
+          // console.log(`Здоровье: ${hitPoint}`);
           break;
       case hitPoint < 5 && hitPoint > 0:
-          console.log('Код красный!')
-          console.log(`Здоровье: ${hitPoint}`);
+          // console.log('Код красный!')
+          // console.log(`Здоровье: ${hitPoint}`);
           break;
       case hitPoint <= 0:
-          console.log('Пульса нет...')
-          console.log(`Здоровье: ${hitPoint}`);
+          // console.log('Пульса нет...')
+          // console.log(`Здоровье: ${hitPoint}`);
           break;
   }
   }
@@ -54,7 +54,7 @@ function BattleMap(props) {
   }
 
   function attackAction(numberOfDice, setNewHitPoints, currentHitPoints){
-      console.log('Атака!')
+      // console.log('Атака!')
       let vector = Math.abs(characterPosition - enemyPosition);
       switch(vector){
           case 1: 
@@ -70,18 +70,20 @@ function BattleMap(props) {
         console.log('Attack character')
         setEndCharacterAttack(false)
         attackAction(2, setCharacterHitPoints, characterHitPoints)
+        props.setIsEndCharacterTurn(false)
       break;
       case (event.target.classList.contains('enemy')):
         console.log('Attack enemy')
         setEndCharacterAttack(true);
         attackAction(3, setEnemyHitPoints, enemyHitPoints)
+        props.setIsEndCharacterTurn(true)
       break;
     }
   }
 
 
   useEffect(()=>{
-    if(props.isEndCharacterTurn && enemyHitPoints > 0){
+    if(enemyHitPoints > 0){
       attackTarget('', 'character')
     }
   }, [props.isEndCharacterTurn])
@@ -109,6 +111,7 @@ function BattleMap(props) {
               enemyHitPoints={enemyHitPoints}
               endCharacterAttack={endCharacterAttack}
               setEndCharacterAttack={setEndCharacterAttack}
+              attackTarget={attackTarget}
             />)
   }
     return array;
