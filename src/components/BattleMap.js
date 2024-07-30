@@ -41,24 +41,26 @@ function BattleMap(props) {
       let sumOfDefRoll = defStat + props.throwD10Dice(1);
       let currentDamage = props.throwD6Dice(numberOfDice) + damageMod;
       if(sumOfAttackRoll > sumOfDefRoll){
-        // console.log('Ты попал!')
-        // console.log('На атаке выпало: '+ sumOfAttackRoll);
-        // console.log('На защите выпало: '+ sumOfDefRoll);
+        console.log('Ты попал!')
+        console.log('На атаке выпало: '+ sumOfAttackRoll);
+        console.log('На защите выпало: '+ sumOfDefRoll);
         if(currentArmor < currentDamage) {
-          // console.log('Ты пробил!')
+          console.log('Ты пробил!')
+          console.log('Твой урон: '+ currentDamage)
+          console.log('Броня врага до пробития: ' + currentArmor)
           if(currentArmor > 0) setNewArmor(currentArmor - 1);
           currentDamage = currentDamage - currentArmor > 0 ? currentDamage - currentArmor : 0;
           let newHitPoints = currentHitPoints - currentDamage > 0 ? currentHitPoints - currentDamage : 0; 
           setNewHitPoints(newHitPoints);
-        }else {
-          // console.log('Но не пробил...')
-          // console.log('Твой урон: '+ currentDamage)
-          // console.log('Броня врага: ' + currentArmor)
+        } else {
+          console.log('Но не пробил...')
+          console.log('Твой урон: '+ currentDamage)
+          console.log('Броня врага: ' + currentArmor)
         }
       } else {
-        // console.log('Ты не попал!')
-        // console.log('На атаке выпало: '+ sumOfAttackRoll);
-        // console.log('На защите выпало: '+ sumOfDefRoll);
+        console.log('Ты не попал!')
+        console.log('На атаке выпало: '+ sumOfAttackRoll);
+        console.log('На защите выпало: '+ sumOfDefRoll);
       } 
   }
 
