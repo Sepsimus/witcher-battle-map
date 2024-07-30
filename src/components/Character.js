@@ -1,7 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import CharacterConfig from '../configuration/CharacterConfig';
-import WeaponConfig from '../configuration/WeaponConfig';
-import ArmorConfig from '../configuration/ArmorConfig';
 
 function Character(props) {
 
@@ -9,7 +7,6 @@ function Character(props) {
     const vector = props.isPositionCharacter - props.isPositionEnemy;
 
     const character = useRef(null);
-    const characterTooltip = useRef(null);
 
     useEffect(()=>{
         if(props.isEndCharacterTurn) {
@@ -79,16 +76,7 @@ function Character(props) {
     const selectClass = characterSelect && props.characterHitPoints > 0 ? 'character_pulse': 'character_inactive'; 
 
     return (
-        <>
-            <div className={`character ${deadClass} ${selectClass}`} ref={character} onMouseEnter={() => {props.showHitPoints(characterTooltip, 'character')}} onMouseLeave={() => {props.hideHitPoints(characterTooltip, 'character')}}>
-                <p className="character__tooltip character__tooltip_hidden" ref={characterTooltip}>
-                    ПЗ: {props.characterHitPoints}/{CharacterConfig.hitPoints}
-                    <br/>Число ходов: {props.characterMovePoints}
-                    <br/>Броня: {props.characterArmorPoints}/{ArmorConfig[CharacterConfig.armor].armorPoints}
-                    <br/>Урон: {WeaponConfig[CharacterConfig.weapon].numberOfDice}d6{WeaponConfig[CharacterConfig.weapon].damageMod > 0 && '+'+WeaponConfig[CharacterConfig.weapon].damageMod}
-                </p>
-            </div>
-        </>
+            <div className={`character ${deadClass} ${selectClass}`} ref={character}/>
     );
 }
 

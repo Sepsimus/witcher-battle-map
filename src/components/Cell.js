@@ -3,8 +3,11 @@ import Character from './Character';
 import Enemy from './Enemy';
 
 function Cell(props) {
+
+    const whosOccupied = props.position === props.isPositionEnemy ? 'cell_occupied cell_occupied-enemy' : props.position === props.isPositionCharacter ? 'cell_occupied cell_occupied-character' : 'cell_free'
+
     return (
-        <div className={`cell ${'cell_'+props.position} ${props.position === props.isPositionEnemy ? 'cell_occupied' : ''}  ${props.position === props.isPositionCharacter ? 'cell_occupied' : ''}`}>
+        <div className={`cell ${'cell_'+props.position} ${whosOccupied}`}>
         {props.position === props.isPositionEnemy && 
             <Enemy 
                 isPositionCharacter={props.isPositionCharacter}
@@ -29,13 +32,13 @@ function Cell(props) {
                     setCharacterMovePoints={props.setCharacterMovePoints}
                     isEndCharacterTurn={props.isEndCharacterTurn}
                     setIsEndCharacterTurn={props.setIsEndCharacterTurn}
-                    showHitPoints={props.showHitPoints}
-                    hideHitPoints={props.hideHitPoints}
+                    // showHitPoints={props.showHitPoints}
+                    // hideHitPoints={props.hideHitPoints}
                     attackAction={props.attackAction}
                     characterHitPoints={props.characterHitPoints}
                     endCharacterAttack={props.endCharacterAttack}
                     setEndCharacterAttack={props.setEndCharacterAttack}
-                    characterArmorPoints={props.characterArmorPoints}
+                    // characterArmorPoints={props.characterArmorPoints}
                 />}
         </div>
     );

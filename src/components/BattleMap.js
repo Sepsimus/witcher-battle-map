@@ -3,6 +3,7 @@ import Cell from './Cell';
 import CharacterConfig from '../configuration/CharacterConfig';
 import WeaponConfig from '../configuration/WeaponConfig';
 import ArmorConfig from '../configuration/ArmorConfig';
+import InformationBar from './InformationBar';
 
 function BattleMap(props) {
 
@@ -43,11 +44,12 @@ function BattleMap(props) {
         // console.log('Ты попал!')
         // console.log('На атаке выпало: '+ sumOfAttackRoll);
         // console.log('На защите выпало: '+ sumOfDefRoll);
-        if(currentArmor > 0 && currentArmor < currentDamage) {
+        if(currentArmor < currentDamage) {
           // console.log('Ты пробил!')
-          setNewArmor(currentArmor - 1);
+          if(currentArmor > 0) setNewArmor(currentArmor - 1);
           currentDamage = currentDamage - currentArmor > 0 ? currentDamage - currentArmor : 0;
-          setNewHitPoints(currentHitPoints - currentDamage);
+          let newHitPoints = currentHitPoints - currentDamage > 0 ? currentHitPoints - currentDamage : 0; 
+          setNewHitPoints(newHitPoints);
         }else {
           // console.log('Но не пробил...')
           // console.log('Твой урон: '+ currentDamage)
@@ -112,7 +114,7 @@ function BattleMap(props) {
               endCharacterAttack={endCharacterAttack}
               setEndCharacterAttack={setEndCharacterAttack}
               attackTarget={attackTarget}
-              characterArmorPoints={characterArmorPoints}
+              // characterArmorPoints={characterArmorPoints}
               enemyArmorPoints={enemyArmorPoints}
               maxEnemyArmorPoints={maxEnemyArmorPoints}
             />)
@@ -122,6 +124,11 @@ function BattleMap(props) {
 
   return (
       <div className='battle-map' onClick={(e) => {attackTarget(e, )}}>
+        <InformationBar 
+          characterArmorPoints={characterArmorPoints}
+          characterHitPoints={characterHitPoints}
+          characterMovePoints={props.characterMovePoints}
+        />
         {renderCells(280)}
       </div>
   );

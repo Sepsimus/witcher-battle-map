@@ -1,0 +1,13 @@
+.information-bar{
+    position: absolute;
+    bottom: 0px;
+    left: 210px;
+    width: 210px;
+    height: 140px;
+    color: azure;
+    background-color: dimgray;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+}

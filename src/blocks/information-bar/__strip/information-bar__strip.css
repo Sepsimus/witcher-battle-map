@@ -1,0 +1,7 @@
+.information-bar__strip{
+    margin: 0;
+    padding: 0;
+    border: 1px solid black;
+    width: 65%;
+    position: relative;
+}

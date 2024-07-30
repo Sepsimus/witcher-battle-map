@@ -13,7 +13,6 @@ function App() {
   useEffect(()=>{
     if(!isEndCharacterTurn){
       setTurnNumber(turnNumber+1);
-      console.log("Ход №"+turnNumber)
     }
   }, [isEndCharacterTurn])
 

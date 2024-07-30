@@ -19,6 +19,12 @@ code {
 
 @import url(./blocks/turn-counter/turn-counter.css);
 
+@import url(./blocks/information-bar/information-bar.css);
+@import url(./blocks/information-bar/__strip/information-bar__strip.css);
+@import url(./blocks/information-bar/__progress/information-bar__progress.css);
+@import url(./blocks/information-bar/__txt/information-bar__txt.css);
+@import url(./blocks/information-bar/__wrapper/information-bar__wrapper.css);
+
 @import url(./blocks/enemy/enemy.css);
 @import url(./blocks/enemy/__tooltip/enemy__tooltip.css);
 @import url(./blocks/enemy/__tooltip/_hidden/enemy__tooltip_hidden.css);

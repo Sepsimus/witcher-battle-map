@@ -1,0 +1,7 @@
+.information-bar__wrapper{
+    margin: 0;
+    padding: 0;
+    display: flex;
+    width: 45%;
+    justify-content: space-between;
+}
