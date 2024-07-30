@@ -17,6 +17,8 @@ code {
 @import url(./blocks/cell/_light/cell_light.css);
 @import url(./blocks/battle-map/battle-map.css);
 
+@import url(./blocks/turn-counter/turn-counter.css);
+
 @import url(./blocks/enemy/enemy.css);
 @import url(./blocks/enemy/__tooltip/enemy__tooltip.css);
 @import url(./blocks/enemy/__tooltip/_hidden/enemy__tooltip_hidden.css);

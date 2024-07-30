@@ -24,7 +24,7 @@ function Character(props) {
         }
     }, [])
       
-    useEffect(()=>{ 
+    useLayoutEffect(()=>{ 
         if(props.characterMovePoints === 0 && props.endCharacterAttack === true) {
             props.setIsEndCharacterTurn(true)
         }
@@ -37,7 +37,7 @@ function Character(props) {
         return () => {
             document.removeEventListener('keypress', moveCharacter)
         }
-    }, [props.characterMovePoints])
+    }, [props.characterMovePoints, props.characterHitPoints])
 
     function cancellationOfMovement(currentVector, cancelingVector){
         if(currentVector !== cancelingVector)
@@ -46,7 +46,7 @@ function Character(props) {
 
     function moveCharacter(event){
         switch(true){
-            case (props.characterMovePoints === 0):
+            case (props.characterMovePoints === 0 || props.characterHitPoints <= 0):
                 break;
             case (event.keyCode === 119 || event.keyCode === 1094):
                 if(props.isPositionCharacter >= 20 && cancellationOfMovement(vector, 20)){
