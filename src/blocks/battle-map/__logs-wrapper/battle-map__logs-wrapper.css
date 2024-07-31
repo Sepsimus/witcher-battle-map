@@ -1,0 +1,9 @@
+.battle-map__logs-wrapper{
+    position: absolute;
+    overflow: hidden;
+    overflow-y: scroll;
+    height: 100px;
+    top:0px;
+    left: 0px;
+    background-color: #1f1f1f;
+}

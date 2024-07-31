@@ -1,7 +1,7 @@
 .turn-counter{
     position: absolute;
     top:0px;
-    left: 0px;
+    right: 0px;
     width: 100px;
     height: 30px;
     text-align: center;

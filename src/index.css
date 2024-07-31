@@ -13,11 +13,16 @@ code {
 }
 
 @import url(./blocks/app/App.css);
+
 @import url(./blocks/cell/cell.css);
 @import url(./blocks/cell/_light/cell_light.css);
+
 @import url(./blocks/battle-map/battle-map.css);
+@import url(./blocks/battle-map/__logs-wrapper/battle-map__logs-wrapper.css);
 
 @import url(./blocks/turn-counter/turn-counter.css);
+
+@import url(./blocks/log/log.css);
 
 @import url(./blocks/information-bar/information-bar.css);
 @import url(./blocks/information-bar/__strip/information-bar__strip.css);

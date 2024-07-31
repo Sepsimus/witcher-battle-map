@@ -5,8 +5,13 @@ import WeaponConfig from '../configuration/WeaponConfig';
 import ArmorConfig from '../configuration/ArmorConfig';
 import InformationBar from './InformationBar';
 import EnemyConfig from '../configuration/EnemyConfig';
+import Log from './Log';
 
 function BattleMap(props) {
+
+  const [logInformation, setLogInformation] = useState(null);
+  const [arrayLogs, setArrayLogs] = useState([]);
+  let creatingLogString = '';
 
   // Character Params Block
   const [characterPosition, setCharacterPosition] = useState(170)
@@ -20,11 +25,12 @@ function BattleMap(props) {
 
   //Enemy Params Block
   const [enemyPosition, setEnemyPosition] = useState(130)
-  const [enemyHitPoints, setEnemyHitPoints] = useState(CharacterConfig.hitPoints || 0);
+  const [enemyHitPoints, setEnemyHitPoints] = useState(EnemyConfig.hitPoints || 0);
   const [enemyArmorPoints, setEnemyArmorPoints] = useState(ArmorConfig[EnemyConfig.armor].armorPoints || 0);
   const enemyDefStat = EnemyConfig.defenceStat;
   const enemyAttackStat = EnemyConfig.attackStat;
   const enemyDiceNumber = WeaponConfig[EnemyConfig.weapon].numberOfDice;
+  const enemyDamageMod = WeaponConfig[EnemyConfig.weapon].damageMod; // если нет CharacterConfig.weapon упадет с ошибкой - добавь проверку!
   
   function showHitPoints(tooltip, className){
     setTimeout(() => {
@@ -36,31 +42,49 @@ function BattleMap(props) {
       tooltip.current.classList.add(`${className}__tooltip_hidden`)
   }
 
+  function checkCriticalHit(attackRoll, defenceRoll){
+    const differenceinThrow = attackRoll - defenceRoll;
+    let dopDamage = 0;
+    switch(true){
+      case (differenceinThrow >= 15):
+        dopDamage = 10
+        console.log('Ты нанес Смертельный крит!')
+      break;
+      case (differenceinThrow >= 13):
+        dopDamage = 8
+        console.log('Ты нанес Тяжелый крит!')
+      break;
+      case (differenceinThrow >= 10):
+        dopDamage = 5
+        console.log('Ты нанес Средний крит!')
+      break;
+      case (differenceinThrow >= 7):
+        dopDamage = 3
+        console.log('Ты нанес Легкий крит!')
+      break;
+    }
+    return dopDamage;
+  }
+
   function attackAction(numberOfDice, damageMod, setNewHitPoints, currentHitPoints, currentArmor, setNewArmor, attackStat, defStat){
       let sumOfAttackRoll = attackStat + props.throwD10Dice(1);
       let sumOfDefRoll = defStat + props.throwD10Dice(1);
-      let currentDamage = props.throwD6Dice(numberOfDice) + damageMod;
       if(sumOfAttackRoll > sumOfDefRoll){
-        console.log('Ты попал!')
-        console.log('На атаке выпало: '+ sumOfAttackRoll);
-        console.log('На защите выпало: '+ sumOfDefRoll);
+        creatingLogString += `и попадает(сложность: ${sumOfDefRoll}, выпало: ${sumOfAttackRoll}) `;
+        let currentDamage = props.throwD6Dice(numberOfDice) + damageMod + checkCriticalHit(sumOfAttackRoll, sumOfDefRoll);
         if(currentArmor < currentDamage) {
-          console.log('Ты пробил!')
-          console.log('Твой урон: '+ currentDamage)
-          console.log('Броня врага до пробития: ' + currentArmor)
+          creatingLogString += `пробивая броню (урон: ${currentDamage - currentArmor}) `
+          setLogInformation(creatingLogString)
           if(currentArmor > 0) setNewArmor(currentArmor - 1);
           currentDamage = currentDamage - currentArmor > 0 ? currentDamage - currentArmor : 0;
           let newHitPoints = currentHitPoints - currentDamage > 0 ? currentHitPoints - currentDamage : 0; 
           setNewHitPoints(newHitPoints);
         } else {
-          console.log('Но не пробил...')
-          console.log('Твой урон: '+ currentDamage)
-          console.log('Броня врага: ' + currentArmor)
+          creatingLogString += `но не пробивает броню (урон: ${currentDamage}, броня: ${currentArmor}) `
         }
       } else {
-        console.log('Ты не попал!')
-        console.log('На атаке выпало: '+ sumOfAttackRoll);
-        console.log('На защите выпало: '+ sumOfDefRoll);
+        creatingLogString += `и промахивается(сложность: ${sumOfDefRoll}, выпало: ${sumOfAttackRoll}) `
+        setLogInformation(creatingLogString)
       } 
   }
 
@@ -72,13 +96,13 @@ function BattleMap(props) {
     }
     switch(true){
       case (target === 'character'):
-        console.log('Attack character')
+        creatingLogString = 'Враг атакует персонажа ';
         setEndCharacterAttack(false)
-        attackAction(enemyDiceNumber, 0, setCharacterHitPoints, characterHitPoints, characterArmorPoints, setCharacterArmorPoints, enemyAttackStat, characterDefStat)
+        attackAction(enemyDiceNumber, enemyDamageMod, setCharacterHitPoints, characterHitPoints, characterArmorPoints, setCharacterArmorPoints, enemyAttackStat, characterDefStat)
         props.setIsEndCharacterTurn(false)
       break;
       case (event.target.classList.contains('enemy') && characterHitPoints > 0):
-        console.log('Attack enemy')
+        creatingLogString = 'Персонаж атакует врага ';
         setEndCharacterAttack(true);
         attackAction(characterDiceNumber, characterDamageMod, setEnemyHitPoints, enemyHitPoints, enemyArmorPoints, setEnemyArmorPoints, characterAttackStat, enemyDefStat)
         props.setIsEndCharacterTurn(true)
@@ -91,6 +115,10 @@ function BattleMap(props) {
       attackTarget('', 'character')
     }
   }, [props.isEndCharacterTurn])
+
+  useEffect(()=>{
+      setArrayLogs(arrayLogs => [...arrayLogs, <Log key={Math.random().toString(16)} logInformation={logInformation}/>])
+  },[logInformation])
 
   function renderCells(numberOfCells){
     let array = [];
@@ -116,16 +144,17 @@ function BattleMap(props) {
               endCharacterAttack={endCharacterAttack}
               setEndCharacterAttack={setEndCharacterAttack}
               attackTarget={attackTarget}
-              // characterArmorPoints={characterArmorPoints}
               enemyArmorPoints={enemyArmorPoints}
-              // maxEnemyArmorPoints={maxEnemyArmorPoints}
             />)
   }
     return array;
   }
 
   return (
-      <div className='battle-map' onClick={(e) => {attackTarget(e, )}}>
+      <div className='battle-map' onClick={(e) => {attackTarget(e, )}}>          
+        <div className="battle-map__logs-wrapper">
+          {arrayLogs}
+        </div>
         <InformationBar 
           characterArmorPoints={characterArmorPoints}
           characterHitPoints={characterHitPoints}
