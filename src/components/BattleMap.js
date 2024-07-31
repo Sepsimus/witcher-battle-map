@@ -4,6 +4,7 @@ import CharacterConfig from '../configuration/CharacterConfig';
 import WeaponConfig from '../configuration/WeaponConfig';
 import ArmorConfig from '../configuration/ArmorConfig';
 import InformationBar from './InformationBar';
+import EnemyConfig from '../configuration/EnemyConfig';
 
 function BattleMap(props) {
 
@@ -19,12 +20,11 @@ function BattleMap(props) {
 
   //Enemy Params Block
   const [enemyPosition, setEnemyPosition] = useState(130)
-  const [enemyHitPoints, setEnemyHitPoints] = useState(35);
-  const [enemyArmorPoints, setEnemyArmorPoints] = useState(3);
-  const enemyDefStat = 10;
-  const enemyAttackStat = 20;
-  const maxEnemyArmorPoints = 3;
-  const enemyDiceNumber = 5;
+  const [enemyHitPoints, setEnemyHitPoints] = useState(CharacterConfig.hitPoints || 0);
+  const [enemyArmorPoints, setEnemyArmorPoints] = useState(ArmorConfig[EnemyConfig.armor].armorPoints || 0);
+  const enemyDefStat = EnemyConfig.defenceStat;
+  const enemyAttackStat = EnemyConfig.attackStat;
+  const enemyDiceNumber = WeaponConfig[EnemyConfig.weapon].numberOfDice;
   
   function showHitPoints(tooltip, className){
     setTimeout(() => {
@@ -118,7 +118,7 @@ function BattleMap(props) {
               attackTarget={attackTarget}
               // characterArmorPoints={characterArmorPoints}
               enemyArmorPoints={enemyArmorPoints}
-              maxEnemyArmorPoints={maxEnemyArmorPoints}
+              // maxEnemyArmorPoints={maxEnemyArmorPoints}
             />)
   }
     return array;

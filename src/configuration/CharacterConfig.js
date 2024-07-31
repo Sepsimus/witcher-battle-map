@@ -3,7 +3,7 @@ const CharacterConfig = {
     movementPoints: 2,
     armor: 'Gambeson',
     weapon: 'Hunting Falchion',
-    attackStat: 12,
-    defenceStat: 12,
+    attackStat: 13,
+    defenceStat: 10,
 }
 export default CharacterConfig

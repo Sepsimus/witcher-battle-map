@@ -20,7 +20,6 @@ function Cell(props) {
                 enemyHitPoints={props.enemyHitPoints}
                 attackTarget={props.attackTarget}
                 enemyArmorPoints={props.enemyArmorPoints}
-                maxEnemyArmorPoints={props.maxEnemyArmorPoints}
             />}
             {props.position === props.isPositionCharacter && 
                 <Character 
@@ -32,13 +31,10 @@ function Cell(props) {
                     setCharacterMovePoints={props.setCharacterMovePoints}
                     isEndCharacterTurn={props.isEndCharacterTurn}
                     setIsEndCharacterTurn={props.setIsEndCharacterTurn}
-                    // showHitPoints={props.showHitPoints}
-                    // hideHitPoints={props.hideHitPoints}
                     attackAction={props.attackAction}
                     characterHitPoints={props.characterHitPoints}
                     endCharacterAttack={props.endCharacterAttack}
                     setEndCharacterAttack={props.setEndCharacterAttack}
-                    // characterArmorPoints={props.characterArmorPoints}
                 />}
         </div>
     );
