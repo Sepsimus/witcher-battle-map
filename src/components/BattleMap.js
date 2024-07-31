@@ -81,6 +81,7 @@ function BattleMap(props) {
           setNewHitPoints(newHitPoints);
         } else {
           creatingLogString += `но не пробивает броню (урон: ${currentDamage}, броня: ${currentArmor}) `
+          setLogInformation(creatingLogString)
         }
       } else {
         creatingLogString += `и промахивается(сложность: ${sumOfDefRoll}, выпало: ${sumOfAttackRoll}) `

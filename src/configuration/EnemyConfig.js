@@ -1,8 +1,8 @@
 const EnemyConfig = {
     hitPoints: 25,
     movementPoints: 1,
-    armor: 'Gambeson',
-    weapon: 'Kord',
+    armor: 'Brigantine',
+    weapon: 'Hunting Falchion',
     attackStat: 10,
     defenceStat: 10,
 }

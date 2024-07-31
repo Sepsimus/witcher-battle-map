@@ -1,8 +1,8 @@
 const CharacterConfig = {
     hitPoints: 40,
     movementPoints: 2,
-    armor: 'Gambeson',
-    weapon: 'Hunting Falchion',
+    armor: 'Plate Armor',
+    weapon: 'Iron Bastard Swords',
     attackStat: 13,
     defenceStat: 10,
 }
