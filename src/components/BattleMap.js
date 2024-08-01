@@ -66,54 +66,59 @@ function BattleMap(props) {
     return dopDamage;
   }
 
-  function attackAction(numberOfDice, damageMod, setNewHitPoints, currentHitPoints, currentArmor, setNewArmor, attackStat, defStat){
-      let sumOfAttackRoll = attackStat + props.throwD10Dice(1);
+  function attackAction(attackType, numberOfDice, damageMod, setNewHitPoints, currentHitPoints, currentArmor, setNewArmor, attackStat, defStat){
+      let sumOfAttackRoll = attackType === 'strong' ? attackStat + props.throwD10Dice(1) - 3 : attackStat + props.throwD10Dice(1);
       let sumOfDefRoll = defStat + props.throwD10Dice(1);
       if(sumOfAttackRoll > sumOfDefRoll){
         creatingLogString += `и попадает(сложность: ${sumOfDefRoll}, выпало: ${sumOfAttackRoll}) `;
         let currentDamage = props.throwD6Dice(numberOfDice) + damageMod + checkCriticalHit(sumOfAttackRoll, sumOfDefRoll);
+        if(attackType === 'strong') currentDamage *= 2;
         if(currentArmor < currentDamage) {
           creatingLogString += `пробивая броню (урон: ${currentDamage - currentArmor}) `
-          setLogInformation(creatingLogString)
           if(currentArmor > 0) setNewArmor(currentArmor - 1);
           currentDamage = currentDamage - currentArmor > 0 ? currentDamage - currentArmor : 0;
           let newHitPoints = currentHitPoints - currentDamage > 0 ? currentHitPoints - currentDamage : 0; 
           setNewHitPoints(newHitPoints);
         } else {
           creatingLogString += `но не пробивает броню (урон: ${currentDamage}, броня: ${currentArmor}) `
-          setLogInformation(creatingLogString)
-        }
+         }
       } else {
         creatingLogString += `и промахивается(сложность: ${sumOfDefRoll}, выпало: ${sumOfAttackRoll}) `
-        setLogInformation(creatingLogString)
-      } 
+      }
+      setLogInformation(creatingLogString)
   }
 
-  function attackTarget(event, target){
+  function checkingForAdjacency(){
     let vector = Math.abs(characterPosition - enemyPosition);
     if (!(vector === 1 || vector === 20)){
       console.log('Стоишь не смежно!');
-      return;
-    }
+      return false;
+    } else return true
+  }
+
+  function attackTarget(event, target, attackType){
+    if(attackType === 'strong') event.preventDefault();
+    if(!checkingForAdjacency()) return
     switch(true){
-      case (target === 'character'):
+      case (target === 'character' && enemyHitPoints > 0):
         creatingLogString = 'Враг атакует персонажа ';
         setEndCharacterAttack(false)
-        attackAction(enemyDiceNumber, enemyDamageMod, setCharacterHitPoints, characterHitPoints, characterArmorPoints, setCharacterArmorPoints, enemyAttackStat, characterDefStat)
+        attackAction('fast', enemyDiceNumber, enemyDamageMod, setCharacterHitPoints, characterHitPoints, characterArmorPoints, setCharacterArmorPoints, enemyAttackStat, characterDefStat)
         props.setIsEndCharacterTurn(false)
       break;
       case (event.target.classList.contains('enemy') && characterHitPoints > 0):
-        creatingLogString = 'Персонаж атакует врага ';
+        console.log('Я атакую! '+attackType)
+        creatingLogString = attackType === 'strong' ? 'Персонаж использует Сильную Атаку ' : 'Персонаж использует Быструю Атаку ';
         setEndCharacterAttack(true);
-        attackAction(characterDiceNumber, characterDamageMod, setEnemyHitPoints, enemyHitPoints, enemyArmorPoints, setEnemyArmorPoints, characterAttackStat, enemyDefStat)
+        attackAction(attackType, characterDiceNumber, characterDamageMod, setEnemyHitPoints, enemyHitPoints, enemyArmorPoints, setEnemyArmorPoints, characterAttackStat, enemyDefStat)
         props.setIsEndCharacterTurn(true)
       break;
     }
   }
 
   useEffect(()=>{
-    if(!props.isEndCharacterTurn && enemyHitPoints > 0){
-      attackTarget('', 'character')
+    if(!props.isEndCharacterTurn){
+      attackTarget('', 'character', 'fast')
     }
   }, [props.isEndCharacterTurn])
 
@@ -152,7 +157,7 @@ function BattleMap(props) {
   }
 
   return (
-      <div className='battle-map' onClick={(e) => {attackTarget(e, )}}>          
+      <div className='battle-map' onClick={(e) => {attackTarget(e, '', 'fast')}} onContextMenu={(e) => {attackTarget(e, '', 'strong')}}>          
         <div className="battle-map__logs-wrapper">
           {arrayLogs}
         </div>

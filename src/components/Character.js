@@ -15,7 +15,7 @@ function Character(props) {
         }
       }, [props.isEndCharacterTurn])
 
-      useLayoutEffect(()=>{ 
+    useLayoutEffect(()=>{ 
         if(props.characterMovePoints === 0 && !(Math.abs(vector) === 20 || Math.abs(vector) === 1)) {
             props.setEndCharacterAttack(true)
         }

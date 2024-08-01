@@ -1,5 +1,6 @@
 const CharacterConfig = {
     hitPoints: 40,
+    endurancePoints: 40,
     movementPoints: 2,
     armor: 'Plate Armor',
     weapon: 'Iron Bastard Swords',
