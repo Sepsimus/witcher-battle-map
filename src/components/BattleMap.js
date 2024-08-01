@@ -9,13 +9,14 @@ import Log from './Log';
 
 function BattleMap(props) {
 
-  const [logInformation, setLogInformation] = useState(null);
+  const [logInformation, setLogInformation] = useState('');
   const [arrayLogs, setArrayLogs] = useState([]);
   let creatingLogString = '';
 
   // Character Params Block
   const [characterPosition, setCharacterPosition] = useState(170)
   const [characterHitPoints, setCharacterHitPoints] = useState(CharacterConfig.hitPoints || 0);
+  const [characterEndurancePoints, setCharacterEndurancePoints] = useState(CharacterConfig.endurancePoints || 0);
   const [characterArmorPoints, setCharacterArmorPoints] = useState(ArmorConfig[CharacterConfig.armor].armorPoints || 0); // если нет CharacterConfig.armor упадет с ошибкой - добавь проверку!
   const characterDiceNumber = WeaponConfig[CharacterConfig.weapon].numberOfDice || 0; // если нет CharacterConfig.weapon упадет с ошибкой - добавь проверку!
   const characterDamageMod = WeaponConfig[CharacterConfig.weapon].damageMod; // если нет CharacterConfig.weapon упадет с ошибкой - добавь проверку!
@@ -26,7 +27,9 @@ function BattleMap(props) {
   //Enemy Params Block
   const [enemyPosition, setEnemyPosition] = useState(130)
   const [enemyHitPoints, setEnemyHitPoints] = useState(EnemyConfig.hitPoints || 0);
+  const [enemyEndurancePoints, setEnemyEndurancePoints] = useState(EnemyConfig.endurancePoints || 0);
   const [enemyArmorPoints, setEnemyArmorPoints] = useState(ArmorConfig[EnemyConfig.armor].armorPoints || 0);
+  const enemyNumberOfAttack = EnemyConfig.numberOfAttack;
   const enemyDefStat = EnemyConfig.defenceStat;
   const enemyAttackStat = EnemyConfig.attackStat;
   const enemyDiceNumber = WeaponConfig[EnemyConfig.weapon].numberOfDice;
@@ -66,7 +69,7 @@ function BattleMap(props) {
     return dopDamage;
   }
 
-  function attackAction(attackType, numberOfDice, damageMod, setNewHitPoints, currentHitPoints, currentArmor, setNewArmor, attackStat, defStat){
+  function attackAction(attackType, numberOfDice, damageMod, setNewHitPoints, currentHitPoints, currentArmor, setNewArmor, attackStat, defStat, endurancePoints, setEndurancePoints){
       let sumOfAttackRoll = attackType === 'strong' ? attackStat + props.throwD10Dice(1) - 3 : attackStat + props.throwD10Dice(1);
       let sumOfDefRoll = defStat + props.throwD10Dice(1);
       if(sumOfAttackRoll > sumOfDefRoll){
@@ -75,17 +78,19 @@ function BattleMap(props) {
         if(attackType === 'strong') currentDamage *= 2;
         if(currentArmor < currentDamage) {
           creatingLogString += `пробивая броню (урон: ${currentDamage - currentArmor}) `
-          if(currentArmor > 0) setNewArmor(currentArmor - 1);
+          if(currentArmor > 0) setNewArmor((currentArmor) => currentArmor - 1);
           currentDamage = currentDamage - currentArmor > 0 ? currentDamage - currentArmor : 0;
-          let newHitPoints = currentHitPoints - currentDamage > 0 ? currentHitPoints - currentDamage : 0; 
-          setNewHitPoints(newHitPoints);
+          setNewHitPoints((currentHitPoints) => currentHitPoints - currentDamage > 0 ? currentHitPoints - currentDamage : 0);
         } else {
           creatingLogString += `но не пробивает броню (урон: ${currentDamage}, броня: ${currentArmor}) `
          }
       } else {
         creatingLogString += `и промахивается(сложность: ${sumOfDefRoll}, выпало: ${sumOfAttackRoll}) `
       }
-      setLogInformation(creatingLogString)
+      let newEndurancePoints = attackType==='strong' ? endurancePoints-3 : endurancePoints-1;
+      console.log(creatingLogString)
+      setEndurancePoints(newEndurancePoints > 0 ? newEndurancePoints : 0) //заменить тут как с новым ХП и новой броней
+      setLogInformation((x) => x + creatingLogString)
   }
 
   function checkingForAdjacency(){
@@ -100,25 +105,26 @@ function BattleMap(props) {
     if(attackType === 'strong') event.preventDefault();
     if(!checkingForAdjacency()) return
     switch(true){
-      case (target === 'character' && enemyHitPoints > 0):
-        creatingLogString = 'Враг атакует персонажа ';
-        setEndCharacterAttack(false)
-        attackAction('fast', enemyDiceNumber, enemyDamageMod, setCharacterHitPoints, characterHitPoints, characterArmorPoints, setCharacterArmorPoints, enemyAttackStat, characterDefStat)
-        props.setIsEndCharacterTurn(false)
+      case (target === 'character'):
+        for(let i = 0; i < enemyNumberOfAttack; i++){
+          creatingLogString = 'Враг атакует персонажа ';
+          attackAction('fast', enemyDiceNumber, enemyDamageMod, setCharacterHitPoints, characterHitPoints, characterArmorPoints, setCharacterArmorPoints, enemyAttackStat, characterDefStat, enemyEndurancePoints, setEnemyEndurancePoints)  
+        }
       break;
       case (event.target.classList.contains('enemy') && characterHitPoints > 0):
-        console.log('Я атакую! '+attackType)
         creatingLogString = attackType === 'strong' ? 'Персонаж использует Сильную Атаку ' : 'Персонаж использует Быструю Атаку ';
         setEndCharacterAttack(true);
-        attackAction(attackType, characterDiceNumber, characterDamageMod, setEnemyHitPoints, enemyHitPoints, enemyArmorPoints, setEnemyArmorPoints, characterAttackStat, enemyDefStat)
+        attackAction(attackType, characterDiceNumber, characterDamageMod, setEnemyHitPoints, enemyHitPoints, enemyArmorPoints, setEnemyArmorPoints, characterAttackStat, enemyDefStat, characterEndurancePoints, setCharacterEndurancePoints)
         props.setIsEndCharacterTurn(true)
       break;
     }
   }
 
   useEffect(()=>{
-    if(!props.isEndCharacterTurn){
-      attackTarget('', 'character', 'fast')
+    if(!props.isEndCharacterTurn && enemyHitPoints > 0){
+      attackTarget('', 'character', 'fast');
+      setEndCharacterAttack(false)
+      props.setIsEndCharacterTurn(false)
     }
   }, [props.isEndCharacterTurn])
 
@@ -164,6 +170,7 @@ function BattleMap(props) {
         <InformationBar 
           characterArmorPoints={characterArmorPoints}
           characterHitPoints={characterHitPoints}
+          characterEndurancePoints={characterEndurancePoints}
           characterMovePoints={props.characterMovePoints}
         />
         {renderCells(280)}

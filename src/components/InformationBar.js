@@ -14,6 +14,13 @@ function InformationBar(props) {
             </div>
         </div>
         <div className='information-bar__wrapper'>
+            EP:
+            <div className='information-bar__strip'>
+                <div className='information-bar__progress' style={{backgroundColor: "#0018F9", width: `${props.characterEndurancePoints / CharacterConfig.endurancePoints * 100}%`}}></div>
+                <p className='information-bar__txt'>{props.characterEndurancePoints}/{CharacterConfig.endurancePoints}</p>
+            </div>
+        </div>
+        <div className='information-bar__wrapper'>
             MP:
             <div className='information-bar__strip'>
                 <div className='information-bar__progress' style={{backgroundColor: "#8CC152", width: `${props.characterMovePoints / CharacterConfig.movementPoints * 100}%`}}></div>
