@@ -88,9 +88,8 @@ function BattleMap(props) {
         creatingLogString += `и промахивается(сложность: ${sumOfDefRoll}, выпало: ${sumOfAttackRoll}) `
       }
       let newEndurancePoints = attackType==='strong' ? endurancePoints-3 : endurancePoints-1;
-      console.log(creatingLogString)
       setEndurancePoints(newEndurancePoints > 0 ? newEndurancePoints : 0) //заменить тут как с новым ХП и новой броней
-      setLogInformation((x) => x + creatingLogString)
+      setLogInformation(creatingLogString)
   }
 
   function checkingForAdjacency(){
@@ -107,7 +106,7 @@ function BattleMap(props) {
     switch(true){
       case (target === 'character'):
         for(let i = 0; i < enemyNumberOfAttack; i++){
-          creatingLogString = 'Враг атакует персонажа ';
+          creatingLogString += 'Враг атакует персонажа ';
           attackAction('fast', enemyDiceNumber, enemyDamageMod, setCharacterHitPoints, characterHitPoints, characterArmorPoints, setCharacterArmorPoints, enemyAttackStat, characterDefStat, enemyEndurancePoints, setEnemyEndurancePoints)  
         }
       break;
