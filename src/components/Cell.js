@@ -37,6 +37,8 @@ function Cell(props) {
         event.target.appendChild(document.querySelector(characterClass));
     }
 
+    // Комментарий добавлен
+
     return (
         <div className={`cell ${dragZoneLight ? 'cell_light' : 'cell_dark'}`} onDragStart={handleDragStart} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
             {props.isLast ? <Character throwD6Dice={props.throwD6Dice}/> : <></>}
