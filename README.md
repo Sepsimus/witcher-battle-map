@@ -1,70 +1,37 @@
-# Getting Started with Create React App
+# Демо проекта
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**[Witcher-battle-map](https://witcher-battle-map.netlify.app/)**
 
-## Available Scripts
+## Описание
 
-In the project directory, you can run:
+- **[Основная идея проекта](#основная-идея-проекта)**
+- **[Управление](#Управление)**
+- **[Реализованная функциональность](#реализованная-функциональность)**
+- **[Доработки](#доработки)**
 
-### `npm start`
+## Основная идея проекта
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Реализация боевой системы приближенной к TRPG "Ведьмак". Пошаговая система действий персонажей с инвентарем и вариативными атаками. За основу боевой карты берется классическое поле с квадратными клетками. Сражения предусмотренны как 1 на 1, так и 1 против несколльких.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Управление
 
-### `npm test`
+- Передвижение персонажа реализовано кнопками W/A/S/D;
+- Для быстрой атаки используется Лкм;
+- Для сильной атаки используется Пкм;
+- Противник ходит после игрока;
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Реализованная функциональность
 
-### `npm run build`
+- Окно с логами в которых описывается результат атаки;
+- Плашка отображающая номер хода;
+- Окно данных о персонаже: текущее здоровье(**HP**), текущая выносливость(**EP**), текущий допуск передвижения(**MP**), урон оружия(**DM**), текущая прочность брони(**AP**);
+- Всплывающее окно на противнике, где отображается его текущее здоровье, текущая броня, шанс попадания по нему и шанс защиты от его атаки;
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Доработки
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Улучшить модульность: вынести основные параметры персонажа и противника в *конфиги* и использовать эту информацию непосредственно в необходимом компоненте, а не в родительском(**Основная задача**);
+- Оставить в родительских компонентах только *общую* функциональность используемую как противником, так и игроком;
+- Добавить вычитание 1 выносливости за каждую свыше первой на каждом ходу;
+- Добавить возможность использовать больше одноко противника;
+- Добавить возможность использовать инвентарь и метательные предметы;
+- Добавить последствия критических ранений;
