@@ -20,6 +20,7 @@ function Cell(props) {
                 enemyHitPoints={props.enemyHitPoints}
                 attackTarget={props.attackTarget}
                 enemyArmorPoints={props.enemyArmorPoints}
+                enemyEndurancePoints={props.enemyEndurancePoints}
             />}
             {props.position === props.isPositionCharacter && 
                 <Character 

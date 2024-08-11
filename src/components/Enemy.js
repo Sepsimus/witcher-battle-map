@@ -48,6 +48,7 @@ function Enemy(props) {
             <div className={`enemy ${deadClass}`} ref={enemy} onMouseEnter={() => {props.showHitPoints(enemyTooltip, 'enemy')}} onMouseLeave={() => {props.hideHitPoints(enemyTooltip, 'enemy')}}>
                 <p className="enemy__tooltip enemy__tooltip_hidden" ref={enemyTooltip}>
                     ПЗ: {props.enemyHitPoints}
+                    <br/>Вын: {props.enemyEndurancePoints}
                     <br/>Броня: {props.enemyArmorPoints}/{ArmorConfig[EnemyConfig.armor].armorPoints}
                     <br/>Шанс попасть по этому противнику: {percentIfAttackCharacter}
                     <br/>Шанс что ты защитишься от его атаки: {percentIfAttackEnemy}

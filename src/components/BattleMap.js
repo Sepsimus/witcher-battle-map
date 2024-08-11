@@ -34,7 +34,7 @@ function BattleMap(props) {
   const enemyAttackStat = EnemyConfig.attackStat;
   const enemyDiceNumber = WeaponConfig[EnemyConfig.weapon].numberOfDice;
   const enemyDamageMod = WeaponConfig[EnemyConfig.weapon].damageMod; // если нет CharacterConfig.weapon упадет с ошибкой - добавь проверку!
-  
+
   function showHitPoints(tooltip, className){
     setTimeout(() => {
         tooltip.current.classList.remove(`${className}__tooltip_hidden`)
@@ -87,8 +87,7 @@ function BattleMap(props) {
       } else {
         creatingLogString += `и промахивается(сложность: ${sumOfDefRoll}, выпало: ${sumOfAttackRoll}) `
       }
-      let newEndurancePoints = attackType==='strong' ? endurancePoints-3 : endurancePoints-1;
-      setEndurancePoints(newEndurancePoints > 0 ? newEndurancePoints : 0) //заменить тут как с новым ХП и новой броней
+      setEndurancePoints(endurancePoints => endurancePoints > 0 ? attackType==='strong' ? endurancePoints-3 : endurancePoints-1 : 0)
       setLogInformation(creatingLogString)
   }
 
@@ -107,7 +106,7 @@ function BattleMap(props) {
       case (target === 'character'):
         for(let i = 0; i < enemyNumberOfAttack; i++){
           creatingLogString += 'Враг атакует персонажа ';
-          attackAction('fast', enemyDiceNumber, enemyDamageMod, setCharacterHitPoints, characterHitPoints, characterArmorPoints, setCharacterArmorPoints, enemyAttackStat, characterDefStat, enemyEndurancePoints, setEnemyEndurancePoints)  
+          attackAction('fast', enemyDiceNumber, enemyDamageMod, setCharacterHitPoints, characterHitPoints, characterArmorPoints, setCharacterArmorPoints, enemyAttackStat, characterDefStat, enemyEndurancePoints, setEnemyEndurancePoints) 
         }
       break;
       case (event.target.classList.contains('enemy') && characterHitPoints > 0):
@@ -156,6 +155,7 @@ function BattleMap(props) {
               setEndCharacterAttack={setEndCharacterAttack}
               attackTarget={attackTarget}
               enemyArmorPoints={enemyArmorPoints}
+              enemyEndurancePoints={enemyEndurancePoints}
             />)
   }
     return array;
